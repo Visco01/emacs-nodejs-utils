@@ -14,13 +14,12 @@
     (start-nodejs-current-buffer)
     (browse-url-default-macosx-browser url)))
 
-;; TODO: force-kill buffer
 (defun nodejs-kill ()
   "Kill NodeJS server"
   (interactive)
   (let ((buffname "*Async Shell Command*"))
     (if (bufferp (get-buffer buffname))
-	(let ((kill-buffer-query-functions nil))
+        (let ((kill-buffer-query-functions nil))
 	  (kill-buffer buffname)))))
 
 (defun start-nodejs-project-root ()
