@@ -1,4 +1,4 @@
-;;; emacs-nodejs-utils.el -*- lexical-binding: t; -*-
+;;; emacs-nodejs-utils.el --- package for NodeJS support -*- lexical-binding: t; -*-
 
 ;;; Commentary:
 ;;; This package provides some functions to integrate NodeJS development in Emacs
