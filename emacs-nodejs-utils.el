@@ -4,10 +4,14 @@
 ;;; This package provides some functions to integrate NodeJS development in Emacs
 
 ;;; Code:
-
 (require 'projectile)
 
 (defcustom diamond-nodejs-keymap-prefix "C-c C-n"
+  "The prefix for nodejs-mode key bindings."
+  :type 'string
+  :group 'diamond-nodejs)
+
+(defcustom diamond-nodejs-server-file-name "index.js"
   "The prefix for nodejs-mode key bindings."
   :type 'string
   :group 'diamond-nodejs)
@@ -31,6 +35,12 @@
   "When t, automatically power up the server on save."
   :type 'boolean
   :group 'diamond-nodejs)
+
+(defun check-projectile ()
+  "Check if current buffer is in a known project"
+  (if (eq (projectile-project-name) "-")
+      nil
+    t))
 
 (defun nodejs-open ()
   "Open NodeJS server on MacOS default browser"
@@ -73,6 +83,14 @@
 	  (kill-buffer node-buff-name)))
     (async-shell-command (concat "node "
 				 (buffer-file-name (current-buffer))))))
+
+(defun nodejs-start-server ()
+  "Start the fucking server"
+  (interactive)
+  (nodejs-kill)
+  (if (projectile-project-buffer-p 0000 PROJECT-ROOT)
+      )
+  )
 
 (defun nodejs-mode-run ()
   "Execute nodejs minor mode: kill previous nodejs server and start a new one"
