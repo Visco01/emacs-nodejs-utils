@@ -7,14 +7,45 @@
 
 (require 'projectile)
 
-(defvar-local key-binding-prefix "C-c")
+(defcustom diamond-nodejs-keymap-prefix "C-c C-n"
+  "The prefix for nodejs-mode key bindings."
+  :type 'string
+  :group 'diamond-nodejs)
+
+(defcustom diamond-nodejs-server-on-save t
+  "When t, automatically power up the server on save."
+  :type 'boolean
+  :group 'diamond-nodejs)
+
+(defcustom diamond-nodejs-server-port 8000
+  "When t, automatically power up the server on save."
+  :type 'integer
+  :group 'diamond-nodejs)
+
+(defcustom diamond-nodejs-host-name "localhost"
+  "When t, automatically power up the server on save."
+  :type 'string
+  :group 'diamond-nodejs)
+
+(defcustom diamond-nodejs-http-encryption nil
+  "When t, automatically power up the server on save."
+  :type 'boolean
+  :group 'diamond-nodejs)
 
 (defun nodejs-open ()
   "Open NodeJS server on MacOS default browser"
   (interactive)
-  (let ((url "http://localhost:8000/"))
-    (start-nodejs-current-buffer)
-    (browse-url-default-macosx-browser url)))
+  (start-nodejs-current-buffer)
+  (browse-url-default-browser
+   ;; Url
+   (concat (funcall (lambda ()
+		      (if diamond-nodejs-http-encryption
+			  "https"
+			"http")))
+	   "://"
+	   diamond-nodejs-host-name
+	   ":"
+	   (number-to-string diamond-nodejs-server-port))))
 
 (defun nodejs-kill ()
   "Kill NodeJS server"
@@ -50,13 +81,13 @@
     (nodejs-open)))
 
 (defun nodejs-mode--key (key)
-  (kbd (concat key-binding-prefix " " key)))
+  (kbd (concat diamond-nodejs-keymap-prefix " " key)))
 
-;; NodeJS minor mode definition
 (define-minor-mode nodejs-mode
   "Toggles nodejs-mode on current buffer"
   :init-value nil ; Initial value, nil for disabled
   :global nil
+  :group 'diamond-nodejs
   :lighter " nodejs-mode"
   :keymap
   (list (cons (nodejs-mode--key "o") 'nodejs-open)
