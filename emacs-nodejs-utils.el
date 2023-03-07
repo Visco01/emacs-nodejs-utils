@@ -7,7 +7,7 @@
 
 (require 'projectile)
 
-(defvar-local key-binding-prefix "C-c C-n")
+(defvar-local key-binding-prefix "C-c")
 
 (defun nodejs-open ()
   "Open NodeJS server on MacOS default browser"
