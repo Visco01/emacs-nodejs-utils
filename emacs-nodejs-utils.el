@@ -7,6 +7,8 @@
 
 (require 'projectile)
 
+(defvar-local key-binding-prefix "C-c C-n")
+
 (defun nodejs-open ()
   "Open NodeJS server on MacOS default browser"
   (interactive)
@@ -41,6 +43,28 @@
     (async-shell-command (concat "node "
 				 (buffer-file-name (current-buffer))))))
 
+(defun nodejs-mode-run ()
+  "Execute nodejs minor mode: kill previous nodejs server and start a new one"
+  (progn
+    (nodejs-kill)
+    (nodejs-open)))
+
+(defun nodejs-mode--key (key)
+  (kbd (concat key-binding-prefix " " key)))
+
+;; NodeJS minor mode definition
+(define-minor-mode nodejs-mode
+  "Toggles nodejs-mode on current buffer"
+  :init-value nil ; Initial value, nil for disabled
+  :global nil
+  :lighter " nodejs-mode"
+  :keymap
+  (list (cons (nodejs-mode--key "o") 'nodejs-open)
+	(cons (nodejs-mode--key "k") 'nodejs-kill))
+
+  (if nodejs-mode
+      (add-hook 'after-save-hook 'nodejs-mode-run)
+    (remove-hook 'after-save-hook 'nodejs-mode-run)))
 
 (provide 'emacs-nodejs-utils)
 ;;; emacs-nodejs-utils.el ends here
